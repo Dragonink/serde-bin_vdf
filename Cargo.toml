@@ -6,6 +6,12 @@ edition = "2024"
 publish = false
 
 [dependencies]
+num_enum = "0.7.3"
+serde = "1.0.219"
+winnow = { version = "0.7.4", features = ["simd"] }
+
+[dev-dependencies]
+serde = { version = "1.0.219", features = ["derive"] }
 
 
 [lints.rust]
