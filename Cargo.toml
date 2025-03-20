@@ -1,0 +1,109 @@
+[package]
+name = "serde-bin_vdf"
+version = "0.1.0"
+authors = ["Dragonink"]
+edition = "2024"
+publish = false
+
+[dependencies]
+
+
+[lints.rust]
+# Correctness
+let-underscore = "deny"
+meta_variable_misuse = "deny"
+missing_abi = "forbid"
+unsafe_attr_outside_unsafe = "forbid"
+unsafe_op_in_unsafe_fn = "forbid"
+unused_must_use = "deny"
+# Restriction
+missing_docs = "warn"
+unsafe_code = "forbid"
+# Suspicious
+missing_copy_implementations = "warn"
+missing_debug_implementations = "warn"
+redundant_imports = "warn"
+redundant_lifetimes = "warn"
+unit_bindings = "warn"
+unnameable_types = "warn"
+unreachable_pub = "warn"
+unused = { level = "warn", priority = -1 }
+unused_crate_dependencies = "warn"
+# Style
+non_ascii_idents = "deny"
+unused_import_braces = "warn"
+unused_lifetimes = "warn"
+unused_qualifications = "warn"
+
+[lints.clippy]
+# Restriction
+allow_attributes = "warn"
+allow_attributes_without_reason = "warn"
+as_pointer_underscore = "deny"
+assertions_on_result_states = "warn"
+clone_on_ref_ptr = "warn"
+create_dir = "warn"
+dbg_macro = "warn"
+default_union_representation = "deny"
+deref_by_slicing = "warn"
+doc_include_without_cfg = "warn"
+empty_enum_variants_with_brackets = "warn"
+empty_structs_with_brackets = "warn"
+exhaustive_enums = "warn"
+exhaustive_structs = "warn"
+exit = "deny"
+filetype_is_file = "warn"
+float_cmp_const = "warn"
+fn_to_numeric_cast = "warn"
+get_unwrap = "warn"
+if_then_some_else_none = "warn"
+impl_trait_in_params = "warn"
+infinite_loop = "warn"
+let_underscore_must_use = "deny"
+let_underscore_untyped = "warn"
+lossy_float_literal = "warn"
+map_err_ignore = "warn"
+map_with_unused_argument_over_ranges = "warn"
+mem_forget = "deny"
+missing_assert_message = "warn"
+missing_docs_in_private_items = "warn"
+mod_module_files = "warn"
+module_name_repetitions = "warn"
+multiple_unsafe_ops_per_block = "forbid"
+mutex_atomic = "warn"
+mutex_integer = "warn"
+needless_raw_strings = "warn"
+non_zero_suggestions = "warn"
+pathbuf_init_then_push = "warn"
+pattern_type_mismatch = "warn"
+print_stderr = "warn"
+print_stdout = "warn"
+pub_without_shorthand = "warn"
+rc_buffer = "warn"
+rc_mutex = "warn"
+redundant_type_annotations = "warn"
+rest_pat_in_fully_bound_structs = "warn"
+semicolon_outside_block = "warn"
+str_to_string = "warn"
+string_lit_chars_any = "warn"
+string_slice = "warn"
+string_to_string = "warn"
+tests_outside_test_module = "warn"
+todo = "warn"
+try_err = "warn"
+undocumented_unsafe_blocks = "forbid"
+unnecessary_safety_comment = "warn"
+unnecessary_safety_doc = "warn"
+unnecessary_self_imports = "warn"
+unneeded_field_pattern = "warn"
+unseparated_literal_suffix = "warn"
+unused_result_ok = "warn"
+unused_trait_names = "warn"
+unwrap_used = "warn"
+verbose_file_reads = "warn"
+# Pedantic
+pedantic = { level ="warn", priority = -1 }
+# Nursery
+nursery = { level = "warn", priority = -1 }
+# Cargo
+cargo = { level = "warn", priority = -1 }
