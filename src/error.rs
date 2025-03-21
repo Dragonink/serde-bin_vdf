@@ -1,6 +1,7 @@
 //! (De)serialization gone wrong
 
 use std::{
+	ffi::NulError,
 	fmt::{self, Debug, Display, Formatter},
 	str::Utf8Error,
 };
@@ -11,14 +12,15 @@ use winnow::{
 	stream::Stream,
 };
 
-use crate::de::DataType;
+use crate::DataType;
 
 /// Possible errors that can occur when (de)serializing Binary VDF data
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 #[non_exhaustive]
 pub enum Error<E = winnow::error::ContextError> {
 	/// Generic error message
 	Message(String),
+
 	/// Error from the parser
 	ParserError(E),
 	/// A data type has not been parsed
@@ -36,6 +38,15 @@ pub enum Error<E = winnow::error::ContextError> {
 	},
 	/// A string is not UTF-8
 	Utf8Error(Utf8Error),
+
+	/// Error from an IO operation
+	IoError(std::io::Error),
+	/// The key has not been serialized
+	MissingKey,
+	/// A string contains a nul byte
+	NulError(NulError),
+	/// This type cannot be serialized
+	CannotSerialize(&'static str),
 }
 impl<E> From<TryFromPrimitiveError<DataType>> for Error<E> {
 	fn from(err: TryFromPrimitiveError<DataType>) -> Self {
@@ -45,6 +56,16 @@ impl<E> From<TryFromPrimitiveError<DataType>> for Error<E> {
 impl<E> From<Utf8Error> for Error<E> {
 	fn from(err: Utf8Error) -> Self {
 		Self::Utf8Error(err)
+	}
+}
+impl<E> From<std::io::Error> for Error<E> {
+	fn from(err: std::io::Error) -> Self {
+		Self::IoError(err)
+	}
+}
+impl<E> From<NulError> for Error<E> {
+	fn from(err: NulError) -> Self {
+		Self::NulError(err)
 	}
 }
 impl<E: Display> Display for Error<E> {
@@ -61,6 +82,10 @@ impl<E: Display> Display for Error<E> {
 				write!(f, "expected {expected:?} data type, parsed {parsed:?}")
 			}
 			Self::Utf8Error(ref err) => Display::fmt(err, f),
+			Self::IoError(ref err) => Display::fmt(err, f),
+			Self::MissingKey => write!(f, "key has not been serialized"),
+			Self::NulError(ref err) => Display::fmt(err, f),
+			Self::CannotSerialize(ty) => write!(f, "values of type {ty} cannot be serialized"),
 		}
 	}
 }
@@ -74,9 +99,13 @@ where
 			| Self::ParserError(_)
 			| Self::MissingDataType
 			| Self::UnsupportedDataType(_)
-			| Self::InvalidDataType { .. } => None,
+			| Self::InvalidDataType { .. }
+			| Self::MissingKey
+			| Self::CannotSerialize(_) => None,
 			Self::UnknownDataType(ref err) => Some(err),
 			Self::Utf8Error(ref err) => Some(err),
+			Self::IoError(ref err) => Some(err),
+			Self::NulError(ref err) => Some(err),
 		}
 	}
 }
@@ -100,6 +129,14 @@ impl<I, EE: Into<Self>, E> FromExternalError<I, EE> for Error<E> {
 	}
 }
 impl<E> serde::de::Error for Error<E>
+where
+	E: Debug + Display,
+{
+	fn custom<T: Display>(msg: T) -> Self {
+		Self::Message(msg.to_string())
+	}
+}
+impl<E> serde::ser::Error for Error<E>
 where
 	E: Debug + Display,
 {

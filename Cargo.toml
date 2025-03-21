@@ -111,5 +111,6 @@ verbose_file_reads = "warn"
 pedantic = { level ="warn", priority = -1 }
 # Nursery
 nursery = { level = "warn", priority = -1 }
+redundant_pub_crate = "allow"
 # Cargo
 cargo = { level = "warn", priority = -1 }
