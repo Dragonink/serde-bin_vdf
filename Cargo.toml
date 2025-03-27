@@ -2,6 +2,10 @@
 name = "serde-bin_vdf"
 version = "0.1.0"
 authors = ["Dragonink"]
+description = "Serde format library for the Steam Binary KeyValues format"
+repository = "https://github.com/Dragonink/serde-bin_vdf"
+keywords = ["serde", "vdf"]
+categories = ["encoding", "parser-implementations"]
 edition = "2024"
 publish = false
 
